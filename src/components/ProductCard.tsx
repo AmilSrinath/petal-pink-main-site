@@ -36,6 +36,7 @@ const ProductCard: FC<ProductCardProps> = ({
         status,
         image,
     } = data;
+
     const [variantActive, setVariantActive] = React.useState(0);
     const [showModalQuickView, setShowModalQuickView] = React.useState(false);
     const navigate = useNavigate(); // Initialize useNavigate

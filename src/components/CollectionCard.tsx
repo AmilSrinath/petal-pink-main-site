@@ -15,9 +15,9 @@ export interface CollectionCard2Props {
 
 const CollectionCard2: FC<CollectionCard2Props> = ({
   className,
-  imgs = [productImgs[9], productImgs[10], productImgs[11], productImgs[8]],
-  name = "Product Name",
-  description = "Product Description",
+  imgs = [],
+  name = null,
+  description = null,
   price,
 }) => {
   return (

@@ -1,10 +1,12 @@
-import React, { FC, useEffect, useId } from "react";
+import React, {FC, useEffect, useId, useState} from "react";
 import Heading from "components/Heading/Heading";
 import Glide from "@glidejs/glide";
 import CollectionCard from "./CollectionCard";
 import CollectionCard2 from "./CollectionCard2";
 import { Link } from "react-router-dom";
 import { DEMO_LARGE_PRODUCTS } from "./SectionSliderLargeProduct2";
+import {Product} from "../containers/PageSearch";
+import {fetchProducts} from "../data/product_auto_fetch";
 
 export interface SectionSliderLargeProductProps {
   className?: string;
@@ -55,6 +57,30 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({
 
   const MyCollectionCard = cardStyle === "style1" ? CollectionCard : CollectionCard2;
 
+
+
+  const [products, setProducts] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchProducts();
+        if (Array.isArray(response)) {
+          console.log('Fetched Products:', response);
+          setProducts(response);
+
+        } else {
+          console.error('Unexpected response format:', response);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   return (
     <div className={`nc-SectionSliderLargeProduct ${className}`}>
       <div className={`${UNIQUE_CLASS} flow-root`}>
@@ -63,15 +89,17 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({
         </Heading>
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {DEMO_LARGE_PRODUCTS.map((product, index) => (
-              <li className={`glide__slide`} key={index}>
-                <MyCollectionCard
-                  name={product.name}
-                  price={product.price}
-                  imgs={product.images}
-                  description={product.desc}
-                />
-              </li>
+
+            {products.map((product: any) => (
+                <li className={`glide__slide`} key={product.product_id}>
+                  <MyCollectionCard
+                      name={product.product_name}
+                      price={product.product_price}
+                      imgs={[product.image_url, product.image_url_2, product.image_url_3, product.image_url_3]}
+                      description={product.description}
+                  />
+
+                </li>
             ))}
 
             <li className={`glide__slide   `}>
@@ -82,26 +110,26 @@ const SectionSliderLargeProduct: FC<SectionSliderLargeProductProps> = ({
                     <div className="flex items-center justify-center relative">
                       <span className="text-xl font-semibold">More items</span>
                       <svg
-                        className="absolute left-full w-5 h-5 ml-2 rotate-45 group-hover:scale-110 transition-transform"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                          className="absolute left-full w-5 h-5 ml-2 rotate-45 group-hover:scale-110 transition-transform"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M18.0701 9.57L12.0001 3.5L5.93005 9.57"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeMiterlimit="10"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                            d="M18.0701 9.57L12.0001 3.5L5.93005 9.57"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                         />
                         <path
-                          d="M12 20.4999V3.66992"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeMiterlimit="10"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                            d="M12 20.4999V3.66992"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeMiterlimit="10"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                         />
                       </svg>
                     </div>
